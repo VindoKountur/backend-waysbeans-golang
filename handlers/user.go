@@ -38,13 +38,14 @@ func (h *handlerUser) GetUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	userTransactionsRaw, err := h.TransactionRepository.FindTransactionByUserID(id)
+	// transactions, err := h.TransactionRepository.FindTransactionByUserID(id)
 
-	userTransaction := getTransactionListFromRaw(userTransactionsRaw)
+	// userTransaction := getTransactionListFromRaw(userTransactionsRaw)
 	// user.Transaction = userTransaction
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "success", Data: convertResponseUser(user, userTransaction)})
+	// return c.JSON(http.StatusOK, dto.SuccessResult{Status: "success", Data: convertResponseUser(user, transactions)})
 	// return c.JSON(http.StatusOK, dto.SuccessResult{Status: "success", Data: convertResponseUser(user)})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "success", Data: user})
 }
 
 func convertResponseUser(u models.User, transactions []transactiondto.TransactionResponse) usersdto.UserTransactionByIDResponse {
