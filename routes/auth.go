@@ -1,0 +1,18 @@
+package routes
+
+import (
+	"backendwaysbeans/handlers"
+	"backendwaysbeans/pkg/mysql"
+	"backendwaysbeans/repositories"
+
+	"github.com/labstack/echo/v4"
+)
+
+func AuthRoutes(e *echo.Group) {
+	authRepository := repositories.RepositoryAuth(mysql.DB)
+	profileRepository := repositories.RepositoryProfile(mysql.DB)
+	h := handlers.HandlerAuth(authRepository, profileRepository)
+
+	e.POST("/register", h.Register)
+	e.POST("/login", h.Login)
+}
