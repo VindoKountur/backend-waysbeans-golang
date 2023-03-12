@@ -15,7 +15,6 @@ type Profile struct {
 // Associated with (User)
 type ProfileResponse struct {
 	Phone  string `json:"phone"`
-	Gender string `json:"gender"`
 	Photo  string `json:"photo"`
 	UserID int    `json:"-"`
 }

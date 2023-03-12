@@ -8,6 +8,7 @@ import (
 
 type ProductRepository interface {
 	FindProduct() ([]models.Product, error)
+	FindProductByName(name string) ([]models.Product, error)
 	GetProduct(ID int) (models.Product, error)
 	CreateProduct(product models.Product) (models.Product, error)
 	UpdateProduct(product models.Product) (models.Product, error)
@@ -22,6 +23,13 @@ func (r *repository) FindProduct() ([]models.Product, error) {
 	var products []models.Product
 	// err := r.db.Raw("SELECT * FROM products").Scan(&products).Error
 	err := r.db.Preload("User").Find(&products).Error
+	return products, err
+}
+func (r *repository) FindProductByName(name string) ([]models.Product, error) {
+	var products []models.Product
+	searchName := "%" + name + "%"
+	// err := r.db.Raw("SELECT * FROM products").Scan(&products).Error
+	err := r.db.Where("name LIKE ?", searchName).Preload("User").Find(&products).Error
 	return products, err
 }
 

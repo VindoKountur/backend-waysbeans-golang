@@ -3,7 +3,6 @@ package handlers
 import (
 	profiledto "backendwaysbeans/dto/profile"
 	dto "backendwaysbeans/dto/result"
-	"backendwaysbeans/models"
 	"backendwaysbeans/repositories"
 	"net/http"
 	"time"
@@ -26,24 +25,27 @@ func (h *handlerProfile) UpdateProfileByUser(c echo.Context) error {
 	idUserLogin := userLogin.(jwt.MapClaims)["id"].(float64)
 	dataFilePhoto := c.Get("dataFile").(string)
 
+	profile, err := h.ProfileRepository.GetProfileByUser(int(idUserLogin))
+
 	request := profiledto.ProfileUpdateRequest{
 		Photo: dataFilePhoto,
 		Phone: c.FormValue("phone"),
 	}
 	validation := validator.New()
-	err := validation.Struct(request)
+	err = validation.Struct(request)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	profile := models.Profile{
-		UserID:    int(idUserLogin),
-		Photo:     request.Photo,
-		Phone:     request.Phone,
-		UpdatedAt: time.Now(),
+	if request.Phone != "" {
+		profile.Phone = request.Phone
 	}
+	if dataFilePhoto != "" {
+		profile.Photo = dataFilePhoto
+	}
+	profile.UpdatedAt = time.Now()
 
-	updatedProfile, err := h.ProfileRepository.UpdateProfileByUser(profile, int(idUserLogin))
+	updatedProfile, err := h.ProfileRepository.UpdateProfileByUser(profile)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}

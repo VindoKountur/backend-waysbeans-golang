@@ -9,6 +9,7 @@ import (
 type AuthRepository interface {
 	Register(user models.User) (models.User, error)
 	Login(email string) (models.User, error)
+	CheckAuth(ID int) (models.User, error)
 }
 
 func RepositoryAuth(db *gorm.DB) *repository {
@@ -22,6 +23,12 @@ func (r *repository) Register(user models.User) (models.User, error) {
 
 func (r *repository) Login(email string) (models.User, error) {
 	var user models.User
-	err := r.db.Where("email =?", email).First(&user).Error
+	err := r.db.Where("email =?", email).Preload("Profile").First(&user).Error
+	return user, err
+}
+
+func (r *repository) CheckAuth(ID int) (models.User, error) {
+	var user models.User
+	err := r.db.Where("id = ?", ID).Preload("Profile").First(&user).Error
 	return user, err
 }

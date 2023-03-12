@@ -26,7 +26,14 @@ func HandlerProduct(ProductRepository repositories.ProductRepository) *handlerPr
 }
 
 func (h *handlerProduct) FindProducts(c echo.Context) error {
-	products, err := h.ProductRepository.FindProduct()
+	searchName := c.QueryParam("name")
+	var products []models.Product
+	var err error
+	if searchName == "" {
+		products, err = h.ProductRepository.FindProduct()
+	} else {
+		products, err = h.ProductRepository.FindProductByName(searchName)
+	}
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}

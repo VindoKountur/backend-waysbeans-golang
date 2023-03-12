@@ -9,10 +9,14 @@ type TransactionResponse struct {
 	ID        int                     `json:"id"`
 	UserID    int                     `json:"-"`
 	User      UserTransactionResponse `json:"user"`
+	Name      string                  `json:"name"`
+	Email     string                  `json:"email"`
+	Phone     string                  `json:"phone"`
+	Address   string                  `json:"address"`
+	PostCode  string                  `json:"post_code"`
 	Status    string                  `json:"status"`
-	Cart      []cartdto.CartResponse  `json:"products"`
 	CreatedAt time.Time               `json:"created_at"`
-	UpdatedAt time.Time               `json:"updated_at"`
+	Cart      []cartdto.CartResponse  `json:"products"`
 }
 
 type UserTransactionResponse struct {

@@ -9,7 +9,7 @@ import (
 type ProfileRepository interface {
 	GetProfileByUser(userID int) (models.Profile, error)
 	CreateProfileByUser(profile models.Profile) (models.Profile, error)
-	UpdateProfileByUser(profile models.Profile, UserID int) (models.Profile, error)
+	UpdateProfileByUser(profile models.Profile) (models.Profile, error)
 }
 
 func RepositoryProfile(db *gorm.DB) *repository {
@@ -27,7 +27,7 @@ func (h *repository) CreateProfileByUser(profile models.Profile) (models.Profile
 	return profile, err
 }
 
-func (h *repository) UpdateProfileByUser(profile models.Profile, UserID int) (models.Profile, error) {
-	err := h.db.Where("user_id =?", UserID).Save(&profile).Error
+func (h *repository) UpdateProfileByUser(profile models.Profile) (models.Profile, error) {
+	err := h.db.Save(&profile).Error
 	return profile, err
 }

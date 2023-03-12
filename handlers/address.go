@@ -103,7 +103,9 @@ func (h *handlerAddress) DeleteAddress(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "Success", Data: address})
+	data, err := h.AddressRepository.DeleteAddress(address, addressID)
+
+	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "Success", Data: data})
 }
 
 func (h *handlerAddress) UpdateAddress(c echo.Context) error {

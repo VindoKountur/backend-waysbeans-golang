@@ -18,8 +18,9 @@ type User struct {
 
 // Associated with (Transaction, Profile, Address)
 type UserResponse struct {
-	ID   int    `json:"-"`
-	Name string `json:"name"`
+	ID    int    `json:"-"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 func (UserResponse) TableName() string {

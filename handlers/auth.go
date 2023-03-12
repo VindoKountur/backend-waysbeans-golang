@@ -96,7 +96,9 @@ func (h *handlerAuth) Register(c echo.Context) error {
 
 	loginResponse := authdto.LoginReponse{
 		Email: user.Email,
+		Role:  user.Role,
 		Token: token,
+		Photo: profile.Photo,
 	}
 
 	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "Success", Data: loginResponse})
@@ -136,8 +138,26 @@ func (h *handlerAuth) Login(c echo.Context) error {
 
 	loginResponse := authdto.LoginReponse{
 		Email: user.Email,
+		Role:  user.Role,
 		Token: token,
+		Photo: user.Profile.Photo,
 	}
 
 	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "success", Data: loginResponse})
+}
+
+func (h *handlerAuth) CheckAuth(c echo.Context) error {
+	idUserLogin := int(c.Get("userLogin").(jwt.MapClaims)["id"].(float64))
+	user, err := h.AuthRepository.CheckAuth(idUserLogin)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
+	}
+
+	response := authdto.LoginReponse{
+		Email: user.Email,
+		Role:  user.Role,
+		Photo: user.Profile.Photo,
+	}
+
+	return c.JSON(http.StatusOK, dto.SuccessResult{Status: "success", Data: response})
 }

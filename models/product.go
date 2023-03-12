@@ -43,11 +43,12 @@ func (ProductUserResponse) TableName() string {
 }
 
 type ProductCartResponse struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Photo string `json:"photo"`
-	Price int    `json:"price"`
-	Stock int    `json:"stock"`
+	ID          int    `json:"id"`
+	Name        string `json:"name"`
+	Photo       string `json:"photo"`
+	Price       int    `json:"price"`
+	Description string `json:"description"`
+	Stock       int    `json:"stock"`
 }
 
 func (ProductCartResponse) TableName() string {
