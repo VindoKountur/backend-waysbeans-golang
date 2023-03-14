@@ -5,17 +5,25 @@ import (
 	dto "backendwaysbeans/dto/result"
 	"backendwaysbeans/models"
 	"backendwaysbeans/repositories"
+	"context"
+	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"strconv"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-playground/validator"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
 )
 
-var path_file = "/uploads/"
+var ctx = context.Background()
+var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+var API_KEY = os.Getenv("API_KEY")
+var API_SECRET = os.Getenv("API_SECRET")
 
 type handlerProduct struct {
 	ProductRepository repositories.ProductRepository
@@ -77,11 +85,18 @@ func (h *handlerProduct) CreateProduct(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+	resp, err := cld.Upload.Upload(ctx, request.Photo, uploader.UploadParams{Folder: "waysbeans"})
+
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
 	product := models.Product{
 		Name:        request.Name,
 		Description: request.Description,
 		Price:       request.Price,
-		Photo:       request.Photo,
+		Photo:       resp.SecureURL,
 		Stock:       request.Stock,
 		UserID:      request.UserID,
 		CreatedAt:   time.Now(),
@@ -137,7 +152,13 @@ func (h *handlerProduct) UpdateProduct(c echo.Context) error {
 		product.Stock = request.Stock
 	}
 	if request.Photo != "" {
-		product.Photo = request.Photo
+		cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+		resp, err := cld.Upload.Upload(ctx, request.Photo, uploader.UploadParams{Folder: "dumbmerch"})
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		product.Photo = resp.SecureURL
 	}
 
 	product.UpdatedAt = time.Now()
@@ -166,7 +187,6 @@ func (h *handlerProduct) DeleteProduct(c echo.Context) error {
 	}
 
 	// Delete Photo
-	// err = os.Remove(path_file + product.Photo)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}

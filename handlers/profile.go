@@ -4,9 +4,12 @@ import (
 	profiledto "backendwaysbeans/dto/profile"
 	dto "backendwaysbeans/dto/result"
 	"backendwaysbeans/repositories"
+	"fmt"
 	"net/http"
 	"time"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-playground/validator"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/labstack/echo/v4"
@@ -41,7 +44,13 @@ func (h *handlerProfile) UpdateProfileByUser(c echo.Context) error {
 		profile.Phone = request.Phone
 	}
 	if dataFilePhoto != "" {
-		profile.Photo = dataFilePhoto
+		cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+		resp, err := cld.Upload.Upload(ctx, request.Photo, uploader.UploadParams{Folder: "waysbeans-profile"})
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		profile.Photo = resp.SecureURL
 	}
 	profile.UpdatedAt = time.Now()
 

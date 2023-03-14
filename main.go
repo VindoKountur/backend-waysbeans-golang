@@ -4,6 +4,7 @@ import (
 	"backendwaysbeans/database"
 	"backendwaysbeans/pkg/mysql"
 	"backendwaysbeans/routes"
+	"os"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -31,6 +32,6 @@ func main() {
 
 	e.Static("/uploads", "./uploads")
 
-	PORT := "5000"
-	e.Logger.Fatal(e.Start("localhost:" + PORT))
+	PORT := os.Getenv("PORT")
+	e.Logger.Fatal(e.Start(":" + PORT))
 }

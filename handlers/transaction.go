@@ -52,10 +52,10 @@ func SendMail(status string, transaction models.Transaction) {
 
 			var td = fmt.Sprintf(`
 			<tr>
-				<td>%s</td>
-				<td>%s</td>
-				<td>%s</td>
-				<td>%s</td>
+				<td style='padding: 3px;'>%s</td>
+				<td style='padding: 3px;'>%s</td>
+				<td style='padding: 3px;'>%s</td>
+				<td style='padding: 3px;'>%s</td>
 			</tr>`, productName, price, qty, subtotal)
 			listProduct = append(listProduct, td)
 		}
@@ -82,10 +82,10 @@ func SendMail(status string, transaction models.Transaction) {
 		<table border="0" cellspacing="0" style="margin-top: 10px">
 		<thead>
 			<tr>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
+                <th style='padding: 3px;'>Product Name</th>
+                <th style='padding: 3px;'>Price</th>
+                <th style='padding: 3px;'>Quantity</th>
+                <th style='padding: 3px;'>Subtotal</th>
             </tr>
         </thead>
 		<tbody>
