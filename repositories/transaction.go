@@ -61,7 +61,3 @@ func (r *repository) UpdateTransaction(status string, orderId int) (models.Trans
 	err := r.db.Save(&transaction).Error
 	return transaction, err
 }
-
-// func (h *repository) MinusProductTransaction(ID int) error {
-
-// }
