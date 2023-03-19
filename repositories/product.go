@@ -29,7 +29,7 @@ func (r *repository) FindProductByName(name string) ([]models.Product, error) {
 	var products []models.Product
 	searchName := "%" + name + "%"
 	// err := r.db.Raw("SELECT * FROM products").Scan(&products).Error
-	err := r.db.Where("name LIKE ?", searchName).Preload("User").Find(&products).Error
+	err := r.db.Where("name LIKE BINARY ?", searchName).Preload("User").Find(&products).Error
 	return products, err
 }
 
