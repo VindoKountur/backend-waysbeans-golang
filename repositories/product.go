@@ -22,7 +22,7 @@ func RepositoryProduct(db *gorm.DB) *repository {
 func (r *repository) FindProduct() ([]models.Product, error) {
 	var products []models.Product
 	// err := r.db.Raw("SELECT * FROM products").Scan(&products).Error
-	err := r.db.Preload("User").Find(&products).Order("created_at desc").Error
+	err := r.db.Preload("User").Order("created_at desc").Find(&products).Error
 	return products, err
 }
 func (r *repository) FindProductByName(name string) ([]models.Product, error) {
