@@ -31,7 +31,7 @@ func (h *repository) GetTransaction(ID int) (models.Transaction, error) {
 
 func (h *repository) FindTransaction() ([]models.Transaction, error) {
 	var transactions []models.Transaction
-	err := h.db.Preload("User").Preload("Cart.Product").Find(&transactions).Error
+	err := h.db.Preload("User").Preload("Cart.Product").Order("created_at desc").Find(&transactions).Error
 	return transactions, err
 }
 

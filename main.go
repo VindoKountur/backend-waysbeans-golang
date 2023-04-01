@@ -32,6 +32,10 @@ func main() {
 
 	e.Static("/uploads", "./uploads")
 
+	const defaultPort = "5000"
 	PORT := os.Getenv("PORT")
+	if PORT == "" {
+		PORT = defaultPort
+	}
 	e.Logger.Fatal(e.Start(":" + PORT))
 }
